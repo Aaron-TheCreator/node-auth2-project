@@ -18,6 +18,12 @@ function find() {
       }
     ]
    */
+
+
+  return db('users as u')
+    .join('roles as r', 'u.role_id', 'r.role_id')
+    .select('u.user_id', 'u.username', 'r.role_name as role');
+
 }
 
 function findBy(filter) {
@@ -34,6 +40,12 @@ function findBy(filter) {
       }
     ]
    */
+
+
+  return db('users as u')
+    .join('roles as r', 'u.role_id', 'r.role_id')
+    .select('u.user_id', 'u.username', 'u.password', 'r.role_name as role')
+    .where(filter);
 }
 
 function findById(user_id) {
@@ -47,6 +59,12 @@ function findById(user_id) {
       "role_name": "instructor"
     }
    */
+
+  return db('users as u')
+    .join('roles as r', 'r.role_id', 'u.role_id')
+    .select('u.user_id', 'u.username', 'r.role_name as role')
+    .where('u.user_id', user_id)
+    .first();
 }
 
 /**
@@ -68,6 +86,7 @@ function findById(user_id) {
   }
  */
 async function add({ username, password, role_name }) { // done for you
+  console.log('ab: users-model.js: add(): username', username, 'password:',password, 'role_name:', role_name)
   let created_user_id
   await db.transaction(async trx => {
     let role_id_to_use
